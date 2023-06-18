@@ -32,7 +32,7 @@ class MessagesController extends Controller
             return redirect()->back()->with('alert', ['type' => 'danger', 'msg' => 'Sender is disconnected']);
         }
 
-        $sendMessage = json_decode($this->postMsg($data, 'send-text'));
+        $sendMessage = json_decode($this->postMsg($data, 'messages/send-text'));
 
         // if(!$sendMessage->status){
         //    return redirect()->back()->with('alert',['type' => 'danger','msg' => $sendMessage->msg ?? $sendMessage->message]);
@@ -62,7 +62,7 @@ class MessagesController extends Controller
         if ($number->status == 'Disconnect') {
             return redirect()->back()->with('alert', ['type' => 'danger', 'msg' => 'Sender is disconnected']);
         }
-        $sendMessage = json_decode($this->postMsg($data, 'send-media'));
+        $sendMessage = json_decode($this->postMsg($data, 'messages/send-media'));
         // if (!$sendMessage->status) {
             // return redirect()->back()->with('alert', ['type' => 'danger', 'msg' => $sendMessage->msg ?? $sendMessage->message]);
         // }                
