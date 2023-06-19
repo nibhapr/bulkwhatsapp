@@ -48,7 +48,8 @@ class HomeController extends Controller
     }
     public function destroy(Request $request){
         Number::find($request->deviceId)->delete();
-
+        $response = Http::withHeaders(['content-type' => 'application/json'])->post(env('WA_URL_SERVER').'/delete-device', ['device' => $request->deviceId]);
+        dd($response);
         return back()->with('alert',[
             'type' => 'success',
             'msg' => 'Devices Deleted!'

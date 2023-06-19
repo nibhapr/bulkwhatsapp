@@ -11,12 +11,7 @@
                             <div class="row">
                                 <div class="col-xl-8">
                                     <div class="widget-stats-large-chart-container">
-                                        <div class="card-header logoutbutton">
-                                          
-                                               
-                                          
-                                          
-                                          
+                                        <div class="card-header logoutbutton">                                                                                                                                                                                                                 
                                         </div>
                                         <div class="card-body">
                                             <div id="apex-earnings"></div>
@@ -69,7 +64,9 @@
     </div>
 </x-layout-dashboard>
 <script>
-
+    $(document).ready(function () {
+        $('.account').hide()
+    })
     // if subscription not expired
    const is_expired_subscription = '{{Auth::user()->is_expired_subscription}}';
   if(!is_expired_subscription){
@@ -77,13 +74,13 @@
     let socket;
     let device = '{{$number->body}}';
   
-    if('{{env('TYPE_SERVER')}}' === 'hosting') {
-        socket = io();
-    } else {
+    // if('{{env('TYPE_SERVER')}}' === 'hosting') {
+    //     socket = io();
+    // } else {
         socket = io('{{env('WA_URL_SERVER')}}', {
             transports: ['websocket', 'polling', 'flashsocket']
         });
-   }
+//    }
      
 
        socket.emit('StartConnection','{{$number->body}}')
@@ -105,6 +102,7 @@
         socket.on('connection-open',({token,user,ppUrl}) => {    
             console.log(token, device)        
             if(token == device ) {    
+                $('.account').show()
                 $('.name').html(`Name : ${user.name}`)
                 $('.number').html(`Number : ${user.id}`)
                 $('.device').html(`Device / Token : Not detected - ${token}`)
@@ -113,6 +111,7 @@
                                                     <span class="" role="status" aria-hidden="true"></span>
                                                    Connected
                                                 </button>`)
+                                                $('.logoutbutton').show()
                                                 $('.logoutbutton').html(` <button class="btn btn-danger" class="logout"  id="logout"  onclick="logout({{$number->body}})">
                                                    Logout
                                                </button>`)
@@ -142,10 +141,21 @@
           
                                             
         })
+
+        socket.on("number-mismatch", () => {
+            if(token == device ) {
+            $('.statusss').html(`  <button class="btn btn-danger" type="button" disabled>
+                                                    <span class="" role="status" aria-hidden="true"></span>
+                                                   Unauthorized
+                                                </button>`)
+            }
+        })
         
 
 function logout(device){
  socket.emit('LogoutDevice',device)
+$('.account').hide()
+$('.logoutbutton').hide()
 }
 }
    
