@@ -18,11 +18,11 @@ class CheckApiKey
      */
     public function handle(Request $request, Closure $next)
     {
-        
+        // return $request->all();
         if(!isset($request->sender) || !isset($request->api_key) || !isset($request->number) || !isset($request->message)){
             return response()->json([
                 'status' => false ,
-                'msg' => 'Wrong parameters!',
+                'msg' => 'Wrong parametersss!',
             ],Response::HTTP_BAD_REQUEST);
         }
         // check user by sender then check api key

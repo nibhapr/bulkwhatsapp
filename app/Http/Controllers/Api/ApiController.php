@@ -28,19 +28,19 @@ class ApiController extends Controller
             ],Response::HTTP_BAD_REQUEST);
          }
 
-        $sendMessage = json_decode($this->postMsg($data, 'backend-send-text'));
-        if (!$sendMessage->status) {
-            return response()->json([
-                'status' => false ,
-                'msg' => $sendMessage->msg ?? $sendMessage->message,
-            ],Response::HTTP_BAD_REQUEST);
-         }
+        $sendMessage = json_decode($this->postMsg($data, 'messages/send-text'));
+        // if (!$sendMessage->status) {
+        //     return response()->json([
+        //         'status' => false ,
+        //         'msg' => $sendMessage->msg ?? $sendMessage->message,
+        //     ],Response::HTTP_BAD_REQUEST);
+        //  }
         $number->messages_sent += 1;
         $number->save();
         
         return response()->json([
             'status' => true ,
-            'data' => $sendMessage->data,
+            // 'data' => $sendMessage->data,
         ],Response::HTTP_OK);
         
     
@@ -79,16 +79,13 @@ class ApiController extends Controller
         if ($number->status == 'Disconnect') {
             return response()->json(['status' => false ,'msg' => 'Sender is disconnected'],Response::HTTP_BAD_REQUEST);
         }
-        $sendMessage = json_decode($this->postMsg($data, 'backend-send-media'));
-        if (!$sendMessage->status) {
-            return response()->json( ['status' => false, 'msg' => $sendMessage->msg ?? $sendMessage->message]);
-        }
+        $sendMessage = json_decode($this->postMsg($data, 'messages/send-media'));
+        // if (!$sendMessage->status) {
+        //     return response()->json( ['status' => false, 'msg' => $sendMessage->msg ?? $sendMessage->message]);
+        // }
         $number->messages_sent += 1;
         $number->save();
-        return response()->json(['status' => true, 'data' => $sendMessage->data]);
-    
-       
-     
+        return response()->json(['status' => true]);
      }
   
 
@@ -316,7 +313,7 @@ class ApiController extends Controller
     {
         try {
 
-            $post = Http::withOptions(['verify' => false])->asForm()->post(env('WA_URL_SERVER') . '/' . $url, $data);
+            $post = Http::withHeaders(['content-type' => 'application/json'])->post(env('WA_URL_SERVER') . '/' . $url, $data);
             return $post->body();
             if (json_decode($post)->status === true) {
                 $c = Number::whereBody($data['sender'])->first();
