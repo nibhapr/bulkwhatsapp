@@ -62,7 +62,7 @@ Route::middleware('installed.app','auth')->group(function (){
   Route::get('/campaigns',[CampaignController::class,'lists'])->name('campaign.lists');
   Route::get('/campaign/show/{id}',[CampaignController::class,'show'])->name('campaign.show');
 Route::delete('/delete-all-campaigns',[CampaignController::class,'destroyAll'])->name('campaigns.delete.all');
-  Route::post('/blast',[BlastController::class,'blastProccess'])->name('blast');
+  Route::post('/blast', [BlastController::class,'blastProccess'])->name('blast');
   Route::get('/blast/scheduled',[BlastController::class,'scheduled'])->name('scheduledMessage');
   Route::get('/blast/text-message',[BlastController::class,'getPageBlastText']);
   Route::get('/blast/image-message',[BlastController::class,'getPageBlastImage']);

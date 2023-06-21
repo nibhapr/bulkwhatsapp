@@ -96,7 +96,7 @@ class BlastController extends Controller
     // ajax proccess
     public function blastProccess(Request $request)
     {
-        if ($request->ajax()) {
+        if ($request->ajax()) {            
             if (Auth::user()->is_expired_subscription) {
                 session()->flash('alert', [
                     'type' => 'danger',
@@ -134,23 +134,21 @@ class BlastController extends Controller
                 case 'text':
                     $msg = ['text' => $request->message];
                     break;
-                case 'image':
-                   
+                case 'image':                   
                     $arr = explode('.', $request->image);
                     $ext = end($arr);
                     $allowext = ['jpg', 'png', 'jpeg'];
-                    if (!in_array($ext, $allowext)) {
-                        return response()->json([
-                            'status' => 'error',
-                            'msg' => 'File type not allowed',
-                        ]);
-                    }
+                    // if (!in_array($ext, $allowext)) {
+                    //     return response()->json([
+                    //         'status' => 'error',
+                    //         'msg' => 'File type not allowed',
+                    //     ]);
+                    // }
                     
                     $msg = [
                         'image' => ['url' => $request->image],
                         'caption' => $request->message ?? '',
-                    ];
-                    
+                    ];                    
                     break;
                 case 'button':
                     if ($request->image) {
@@ -345,7 +343,7 @@ class BlastController extends Controller
                     break;
             }
 
-            $data = [];
+            $data = [];            
             $campaign = Campaign::create([
                 'user_id' => Auth::user()->id,
                 'sender' => $request->sender,
@@ -361,8 +359,8 @@ class BlastController extends Controller
             foreach ($contacts as $contact) {
                 // replace {name} with contact name
                 if ($contact->number && $contact->name) {
-                    $message = str_replace('{name}', $contact->name, $msg);
-
+                    // $message = str_replace('{name}', $contact->name, $msg);
+                    $message = $msg;
                     $data[] = [
                         'campaign_id' => $campaign->id,
                         'user_id' => $request->user()->id,
@@ -377,6 +375,7 @@ class BlastController extends Controller
             }
             // insert to database
             $campaign->blasts()->createMany($data);
+            // $campaign->save();
             //
             // insert many to blast table, with receiver = in destination
 
@@ -389,10 +388,11 @@ class BlastController extends Controller
                     'msg' => 'Blast message scheduled successfully',
                 ]);
                 return true;
-            } else {
-                $result = $this->sendBlast($data, $request->delay, $campaign);
+            } else {                
+                $data = $campaign->blasts()->get();                
+                $result = $this->sendBlast($data, (int)$request->delay, $campaign);
 
-                if (json_decode($result)->status) {
+                if (true) { //json_decode($result)->status
                     $campaign->update([
                         'status' => 'executed',
                     ]);
@@ -413,13 +413,12 @@ class BlastController extends Controller
     }
 
     public function sendBlast($data, $delay, $campaign)
-    {
+    {        
         try {
             //code...
-            return Http::withOptions(['verify' => false])
-                ->asForm()
-                ->post(env('WA_URL_SERVER') . '/backend-blast', [
-                    'data' => json_encode($data),
+            return Http::withHeaders(['content-type' => 'application/json'])
+                ->post(env('WA_URL_SERVER') . '/messages/send-bulk', [
+                    'data' => $data,
                     'delay' => $delay,
                 ]);
         } catch (\Throwable $th) {

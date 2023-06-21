@@ -144,7 +144,7 @@
 //    validation on click start blast
 $('#startBlast').click(function(e){
     e.preventDefault();
-
+    
     var name = $('#name').val();
     var tag = $('#tag').val();
     var delay = $('#delay').val();
@@ -377,7 +377,7 @@ $('#startBlast').click(function(e){
 
     // send data to server
     // disable button submitbutton
-    $('#startBlast').attr('disabled',true);
+    // $('#startBlast').attr('disabled',true);
     $('#startBlast').html('Sending...');
     
 
@@ -388,14 +388,12 @@ $('#startBlast').click(function(e){
            url : '{{route('blast')}}',
            data : data,
            dataType : 'json',
-           success : (result) => {
-         
-           
-           window.location = ''
+           success : (result) => {                    
+            // window.location = ''
            },
            error : (err) => {
                 //console.log(err);
-                window.location = '';
+                // window.location = '';
            }
        })
 })
