@@ -391,8 +391,8 @@ class BlastController extends Controller
             } else {                
                 $data = $campaign->blasts()->get();                
                 $result = $this->sendBlast($data, (int)$request->delay, $campaign);
-
-                if (true) { //json_decode($result)->status
+                                
+                if (json_decode($result)->status) { //
                     $campaign->update([
                         'status' => 'executed',
                     ]);

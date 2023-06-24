@@ -377,7 +377,7 @@ $('#startBlast').click(function(e){
 
     // send data to server
     // disable button submitbutton
-    // $('#startBlast').attr('disabled',true);
+    $('#startBlast').attr('disabled',true);
     $('#startBlast').html('Sending...');
     
 
@@ -389,11 +389,13 @@ $('#startBlast').click(function(e){
            data : data,
            dataType : 'json',
            success : (result) => {                    
-            // window.location = ''
+            window.location = ''
+            $('#startBlast').attr('disabled',false);
+            $('#startBlast').html('Start');
            },
            error : (err) => {
                 //console.log(err);
-                // window.location = '';
+                window.location = '';
            }
        })
 })
