@@ -20,11 +20,7 @@ class ContactController extends Controller
         ]);
     }
 
-    public function store(Request $request){
-    $request->validate([
-            'number' => ['unique:contacts']
-        ]);
-   
+    public function store(Request $request){   
         Contact::create([
             'user_id' => Auth::user()->id,
             'tag_id' => $request->tag,
