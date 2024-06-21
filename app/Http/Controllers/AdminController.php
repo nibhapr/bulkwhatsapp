@@ -63,10 +63,10 @@ class AdminController extends Controller
             'username' => 'required|unique:users,username,'.$request->id,
             'email' => 'required|unique:users,email,'.$request->id,
             'limit_device' => 'required|numeric|max:10',
-            /*'active_subscription' => 'required|',*/
+            'active_subscription' => 'required|',
 
         ]);
-        /*if($request->active_subscription == 'active'){
+        if($request->active_subscription == 'active'){
             $request->validate([
                'subscription_expired' => 'required|date',
             ]);
@@ -81,7 +81,7 @@ class AdminController extends Controller
             $request->validate([
                 'password' => 'min:6',
             ]);
-        }*/
+        }
         $user = User::find($request->id);
         $user->username = $request->username;
         $user->email = $request->email;

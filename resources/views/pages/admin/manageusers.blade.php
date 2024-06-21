@@ -135,7 +135,7 @@
                         
                     </select><br>
                     <label for="subscription_expired" class="form-label">Renew Your Licence</label>
-                    <input type="licence" name="licence_expired"   id="licence_expired" class="form-control" placeholder="One year licence"  value=""  readonly>
+                    <input type="date" name="licence_expired"   id="licence_expired" class="form-control" placeholder="One year licence" >
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
