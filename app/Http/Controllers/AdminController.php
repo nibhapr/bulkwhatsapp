@@ -88,7 +88,7 @@ class AdminController extends Controller
         $user->password = $request->password != '' ? bcrypt($request->password) : $user->password;
         $user->limit_device = $request->limit_device;
         $user->active_subscription = $request->active_subscription;
-        /*$user->subscription_expired = $request->subscription_expired ?? null;*/
+        $user->subscription_expired = $request->subscription_expired ?? null;
         $user->save();
         return redirect()->back()->with('alert', ['type' => 'success', 'msg' => 'User updated successfully']);
     }
