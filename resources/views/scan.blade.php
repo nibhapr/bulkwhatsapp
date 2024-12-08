@@ -5,6 +5,7 @@
                 <h4 class="my-5">#Device-{{$number->body}}</h4>
     
                 <div class="alert alert-secondary">Dont turn off your scanner camera before status CONNECTED</div>
+                <div id="mismatch-alert" style="display: none" class="alert alert-danger">The given number is INVALID</div>
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="card widget widget-stats-large">
@@ -143,12 +144,10 @@
         })
 
         socket.on("number-mismatch", () => {
-            if(token == device ) {
-            $('.statusss').html(`  <button class="btn btn-danger" type="button" disabled>
-                                                    <span class="" role="status" aria-hidden="true"></span>
-                                                   Unauthorized
-                                                </button>`)
-            }
+            $('#mismatch-alert').show();
+            setTimeout(() => {
+                $('#mismatch-alert').hide();
+            }, 5000);
         })
         
 
